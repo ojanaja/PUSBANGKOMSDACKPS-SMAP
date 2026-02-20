@@ -121,7 +121,6 @@ public class PeminjamanService {
 
             detail.setKondisiKembali(kondisiKembali);
 
-            Update Master Barang Status & Condition
             barang.setStatus(Barang.StatusBarang.TERSEDIA);
             barang.setKondisi(kondisiKembali);
             barangRepository.save(barang);
