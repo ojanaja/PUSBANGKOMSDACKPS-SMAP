@@ -18,7 +18,7 @@ public class Barang extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "kode_barang", nullable = false, unique = true)
+    @Column(name = "kode_barang", nullable = false)
     private String kodeBarang;
 
     @Column(name = "nup")
@@ -62,17 +62,26 @@ public class Barang extends BaseEntity {
     @Column(name = "photo_url")
     private String photoUrl;
 
-    @Column(name = "barcode_produk", unique = true)
+    @Column(name = "barcode_produk")
     private String barcodeProduk;
 
-    @Column(name = "barcode_sn", unique = true)
+    @Column(name = "barcode_sn")
     private String barcodeSn;
 
     @Column(columnDefinition = "TEXT")
     private String keterangan;
 
+    @Column(name = "tgl_surat")
+    private LocalDate tglSurat;
+
+    @Column(name = "nopol")
+    private String nopol;
+
+    @Column(name = "pemakai")
+    private String pemakai;
+
     public enum KondisiBarang {
-        BAIK, KURANG_BAIK, RUSAK_BERAT
+        BAIK, RUSAK_RINGAN, RUSAK_BERAT, HILANG
     }
 
     public enum StatusBarang {

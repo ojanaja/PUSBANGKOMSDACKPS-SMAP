@@ -12,6 +12,7 @@ public class PeminjamanDetailResponse {
     private Long barangId;
     private String namaBarang;
     private String kodeBarang;
+    private String nup;
     private Barang.KondisiBarang kondisiPinjam;
     private Barang.KondisiBarang kondisiKembali;
     private String keterangan;
@@ -22,6 +23,7 @@ public class PeminjamanDetailResponse {
                 .barangId(detail.getBarang().getId())
                 .namaBarang(detail.getBarang().getNamaBarang())
                 .kodeBarang(detail.getBarang().getKodeBarang())
+                .nup(detail.getBarang().getNup())
                 .kondisiPinjam(detail.getKondisiPinjam())
                 .kondisiKembali(detail.getKondisiKembali())
                 .keterangan(detail.getKeterangan())

@@ -39,4 +39,13 @@ public class PerawatanDetail extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "kondisi_kembali")
     private Barang.KondisiBarang kondisiKembali;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private StatusDetail status = StatusDetail.PROSES;
+
+    public enum StatusDetail {
+        PROSES, SELESAI, BATAL
+    }
 }

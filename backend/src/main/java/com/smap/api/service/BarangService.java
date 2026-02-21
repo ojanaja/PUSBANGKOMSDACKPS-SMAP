@@ -21,13 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class BarangService {
 
     private final BarangRepository barangRepository;
+    private final com.smap.api.repository.PeminjamanRepository peminjamanRepository;
+    private final com.smap.api.repository.PerawatanRepository perawatanRepository;
 
     @Transactional(readOnly = true)
     public PagedResponse<BarangResponse> getAllBarang(int page, int size, String sortDir, String sortBy) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Barang> barangPage = barangRepository.findAll(pageable); 
+        Page<Barang> barangPage = barangRepository.findAll(pageable);
         Page<BarangResponse> responsePage = barangPage.map(BarangResponse::fromEntity);
         return PagedResponse.of(responsePage);
     }
@@ -91,5 +93,30 @@ public class BarangService {
         entity.setBarcodeProduk(req.getBarcodeProduk());
         entity.setBarcodeSn(req.getBarcodeSn());
         entity.setKeterangan(req.getKeterangan());
+        entity.setTglSurat(req.getTglSurat());
+        entity.setNopol(req.getNopol());
+        entity.setPemakai(req.getPemakai());
+    }
+
+    @Transactional(readOnly = true)
+    public PagedResponse<com.smap.api.domain.dto.PeminjamanResponse> getHistoryPeminjamanByBarangId(Long barangId,
+            int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<com.smap.api.domain.entity.Peminjaman> peminjamanPage = peminjamanRepository
+                .findHistoryByBarangIdPaged(barangId, pageable);
+        Page<com.smap.api.domain.dto.PeminjamanResponse> responsePage = peminjamanPage
+                .map(com.smap.api.domain.dto.PeminjamanResponse::fromEntity);
+        return PagedResponse.of(responsePage);
+    }
+
+    @Transactional(readOnly = true)
+    public PagedResponse<com.smap.api.domain.dto.PerawatanResponse> getHistoryPerawatanByBarangId(Long barangId,
+            int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<com.smap.api.domain.entity.Perawatan> perawatanPage = perawatanRepository
+                .findHistoryByBarangIdPaged(barangId, pageable);
+        Page<com.smap.api.domain.dto.PerawatanResponse> responsePage = perawatanPage
+                .map(com.smap.api.domain.dto.PerawatanResponse::fromEntity);
+        return PagedResponse.of(responsePage);
     }
 }

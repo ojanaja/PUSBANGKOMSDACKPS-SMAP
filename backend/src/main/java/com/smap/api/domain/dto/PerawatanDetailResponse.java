@@ -14,6 +14,7 @@ public class PerawatanDetailResponse {
     private Long barangId;
     private String namaBarang;
     private String kodeBarang;
+    private String nup;
     private String gejala;
     private String perbaikan;
     private LocalDate garansi;
@@ -25,6 +26,7 @@ public class PerawatanDetailResponse {
                 .barangId(detail.getBarang().getId())
                 .namaBarang(detail.getBarang().getNamaBarang())
                 .kodeBarang(detail.getBarang().getKodeBarang())
+                .nup(detail.getBarang().getNup())
                 .gejala(detail.getGejala())
                 .perbaikan(detail.getPerbaikan())
                 .garansi(detail.getGaransi())

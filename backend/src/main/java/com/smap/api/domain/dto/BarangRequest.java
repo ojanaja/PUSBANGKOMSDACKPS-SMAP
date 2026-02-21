@@ -37,4 +37,8 @@ public class BarangRequest {
     private String barcodeProduk;
     private String barcodeSn;
     private String keterangan;
+
+    private LocalDate tglSurat;
+    private String nopol;
+    private String pemakai;
 }

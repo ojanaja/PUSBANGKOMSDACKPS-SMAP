@@ -33,6 +33,7 @@ public class PeminjamanService {
     private final PeminjamanRepository peminjamanRepository;
     private final BarangRepository barangRepository;
     private final UserRepository userRepository;
+    private final FileStorageService fileStorageService;
 
     @Transactional(readOnly = true)
     public PagedResponse<PeminjamanResponse> getAllPeminjaman(int page, int size, String sortDir, String sortBy) {
@@ -98,7 +99,8 @@ public class PeminjamanService {
 
     @CacheEvict(value = "dashboardData", allEntries = true)
     @Transactional
-    public PeminjamanResponse kembalikanBarang(Long id, PeminjamanKembaliRequest request, String username) {
+    public PeminjamanResponse kembalikanBarang(Long id, PeminjamanKembaliRequest request,
+            org.springframework.web.multipart.MultipartFile file, String username) {
         Peminjaman peminjaman = peminjamanRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Peminjaman tidak ditemukan"));
 
@@ -108,6 +110,11 @@ public class PeminjamanService {
 
         User penanggungJawab = userRepository.findByUsernameAndDeletedFalse(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
+
+        if (file != null && !file.isEmpty()) {
+            String fileUrl = fileStorageService.storeFile(file);
+            peminjaman.setBeritaAcaraUrl(fileUrl);
+        }
 
         peminjaman.setPenanggungJawab(penanggungJawab);
         peminjaman.setTglKembaliAktual(LocalDate.now());

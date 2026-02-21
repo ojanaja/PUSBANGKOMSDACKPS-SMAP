@@ -28,6 +28,11 @@ public class BarangResponse {
     private String barcodeProduk;
     private String barcodeSn;
     private String keterangan;
+
+    private LocalDate tglSurat;
+    private String nopol;
+    private String pemakai;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -51,6 +56,9 @@ public class BarangResponse {
                 .barcodeProduk(barang.getBarcodeProduk())
                 .barcodeSn(barang.getBarcodeSn())
                 .keterangan(barang.getKeterangan())
+                .tglSurat(barang.getTglSurat())
+                .nopol(barang.getNopol())
+                .pemakai(barang.getPemakai())
                 .createdAt(barang.getCreatedAt())
                 .updatedAt(barang.getUpdatedAt())
                 .build();
