@@ -24,14 +24,14 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: #253466;
+  --primary-foreground: #ffffff;
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: #f4b945;
+  --accent-foreground: #253466;
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
@@ -49,63 +49,35 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --pu-blue-base: #253466;
+  --pu-blue-50: color-mix(in srgb, var(--pu-blue-base) 5%, white);
+  --pu-blue-100: color-mix(in srgb, var(--pu-blue-base) 10%, white);
+  --pu-blue-200: color-mix(in srgb, var(--pu-blue-base) 25%, white);
+  --pu-blue-300: color-mix(in srgb, var(--pu-blue-base) 40%, white);
+  --pu-blue-400: color-mix(in srgb, var(--pu-blue-base) 60%, white);
+  --pu-blue-500: color-mix(in srgb, var(--pu-blue-base) 80%, white);
+  --pu-blue-600: var(--pu-blue-base);
+  --pu-blue-700: color-mix(in srgb, var(--pu-blue-base) 85%, black);
+  --pu-blue-800: color-mix(in srgb, var(--pu-blue-base) 70%, black);
+  --pu-blue-900: color-mix(in srgb, var(--pu-blue-base) 55%, black);
+  --pu-blue-950: color-mix(in srgb, var(--pu-blue-base) 40%, black);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
 
 @theme inline {
+  --color-blue-50: var(--pu-blue-50);
+  --color-blue-100: var(--pu-blue-100);
+  --color-blue-200: var(--pu-blue-200);
+  --color-blue-300: var(--pu-blue-300);
+  --color-blue-400: var(--pu-blue-400);
+  --color-blue-500: var(--pu-blue-500);
+  --color-blue-600: var(--pu-blue-600);
+  --color-blue-700: var(--pu-blue-700);
+  --color-blue-800: var(--pu-blue-800);
+  --color-blue-900: var(--pu-blue-900);
+  --color-blue-950: var(--pu-blue-950);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -153,14 +125,14 @@ button:focus-visible {
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: #f4b945;
+  --primary-foreground: #253466;
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --accent: #253466;
+  --accent-foreground: #f4b945;
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -178,6 +150,19 @@ button:focus-visible {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Invert the blue scale for dark mode readability */
+  --pu-blue-50: color-mix(in srgb, var(--pu-blue-base) 40%, black);
+  --pu-blue-100: color-mix(in srgb, var(--pu-blue-base) 55%, black);
+  --pu-blue-200: color-mix(in srgb, var(--pu-blue-base) 70%, black);
+  --pu-blue-300: color-mix(in srgb, var(--pu-blue-base) 85%, black);
+  --pu-blue-400: var(--pu-blue-base);
+  --pu-blue-500: color-mix(in srgb, var(--pu-blue-base) 80%, white);
+  --pu-blue-600: color-mix(in srgb, var(--pu-blue-base) 60%, white);
+  --pu-blue-700: color-mix(in srgb, var(--pu-blue-base) 40%, white);
+  --pu-blue-800: color-mix(in srgb, var(--pu-blue-base) 25%, white);
+  --pu-blue-900: color-mix(in srgb, var(--pu-blue-base) 10%, white);
+  --pu-blue-950: color-mix(in srgb, var(--pu-blue-base) 5%, white);
 }
 
 @layer base {

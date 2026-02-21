@@ -6,6 +6,9 @@ interface User {
     username: string;
     name: string;
     role: 'ADMIN' | 'PETUGAS' | 'PEMINJAM' | 'VIEWER';
+    nip?: string;
+    jabatan?: string;
+    bidang?: string;
     menuAccess?: string[];
 }
 
