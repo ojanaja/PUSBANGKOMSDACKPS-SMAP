@@ -17,41 +17,45 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
-    private final JwtUtils jwtUtils;
+        private final AuthenticationManager authenticationManager;
+        private final UserRepository userRepository;
+        private final JwtUtils jwtUtils;
 
-    @PostMapping("/login")
-    public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        @PostMapping("/login")
+        public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                Authentication authentication = authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                                                loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwt = jwtUtils.generateJwtToken(authentication);
 
-        org.springframework.security.core.userdetails.User userDetails = (org.springframework.security.core.userdetails.User) authentication
-                .getPrincipal();
+                org.springframework.security.core.userdetails.User userDetails = (org.springframework.security.core.userdetails.User) authentication
+                                .getPrincipal();
 
-        String role = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .findFirst().orElse("ROLE_VIEWER")
-                .replace("ROLE_", "");
+                String role = userDetails.getAuthorities().stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .findFirst().orElse("ROLE_VIEWER")
+                                .replace("ROLE_", "");
 
-        User dbUser = userRepository.findByUsernameAndDeletedFalse(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("Error: User is not found."));
+                User dbUser = userRepository.findByUsernameAndDeletedFalse(userDetails.getUsername())
+                                .orElseThrow(() -> new RuntimeException("Error: User is not found."));
 
-        return ResponseEntity.ok(JwtResponse.builder()
-                .token(jwt)
-                .type("Bearer")
-                .id(dbUser.getId())
-                .username(dbUser.getUsername())
-                .name(dbUser.getName())
-                .role(role)
-                .build());
-    }
+                return ResponseEntity.ok(JwtResponse.builder()
+                                .token(jwt)
+                                .type("Bearer")
+                                .id(dbUser.getId())
+                                .username(dbUser.getUsername())
+                                .name(dbUser.getName())
+                                .role(role)
+                                .nip(dbUser.getNip())
+                                .jabatan(dbUser.getJabatan())
+                                .bidang(dbUser.getBidang())
+                                .build());
+        }
 }

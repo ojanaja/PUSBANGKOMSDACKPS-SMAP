@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/transaksi/peminjaman")
+@RequestMapping("/transaksi/peminjaman")
 @RequiredArgsConstructor
 public class PeminjamanController {
 
@@ -52,15 +52,16 @@ public class PeminjamanController {
                 .body(ApiResponse.success(response, "Berhasil mengajukan peminjaman barang"));
     }
 
-    @PostMapping("/{id}/kembali")
+    @PostMapping(value = "/{id}/kembali", consumes = { "multipart/form-data" })
     @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
     public ResponseEntity<ApiResponse<PeminjamanResponse>> kembalikanBarang(
             @PathVariable Long id,
-            @Valid @RequestBody PeminjamanKembaliRequest request,
+            @RequestPart("request") @Valid PeminjamanKembaliRequest request,
+            @RequestPart(value = "file", required = false) org.springframework.web.multipart.MultipartFile file,
             Authentication authentication) {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        PeminjamanResponse response = peminjamanService.kembalikanBarang(id, request, userDetails.getUsername());
+        PeminjamanResponse response = peminjamanService.kembalikanBarang(id, request, file, userDetails.getUsername());
 
         return ResponseEntity.ok(ApiResponse.success(response, "Berhasil menyelesaikan pengembalian barang"));
     }

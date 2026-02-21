@@ -13,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/barang")
+@RequestMapping("/barang")
 @RequiredArgsConstructor
 public class BarangController {
 
@@ -58,5 +58,27 @@ public class BarangController {
     public ResponseEntity<ApiResponse<Void>> deleteBarang(@PathVariable Long id) {
         barangService.deleteBarang(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Berhasil menghapus barang"));
+    }
+
+    @GetMapping("/{id}/history-peminjaman")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    public ResponseEntity<ApiResponse<PagedResponse<com.smap.api.domain.dto.PeminjamanResponse>>> getHistoryPeminjaman(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PagedResponse<com.smap.api.domain.dto.PeminjamanResponse> response = barangService
+                .getHistoryPeminjamanByBarangId(id, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response, "Berhasil memuat riwayat peminjaman barang"));
+    }
+
+    @GetMapping("/{id}/history-perawatan")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    public ResponseEntity<ApiResponse<PagedResponse<com.smap.api.domain.dto.PerawatanResponse>>> getHistoryPerawatan(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PagedResponse<com.smap.api.domain.dto.PerawatanResponse> response = barangService
+                .getHistoryPerawatanByBarangId(id, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response, "Berhasil memuat riwayat perawatan barang"));
     }
 }
