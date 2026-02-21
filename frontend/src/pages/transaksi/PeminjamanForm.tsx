@@ -55,7 +55,6 @@ export function PeminjamanForm({ isOpen, onClose, preselectedBarang }: Peminjama
     const [selectedBarangList, setSelectedBarangList] = useState<Barang[]>([]);
     const [selectedBarangId, setSelectedBarangId] = useState<string>("");
 
-    // Reset when modal opens
     useEffect(() => {
         if (isOpen) {
             setFormData({
@@ -69,7 +68,6 @@ export function PeminjamanForm({ isOpen, onClose, preselectedBarang }: Peminjama
         }
     }, [isOpen, preselectedBarang]);
 
-    // Fetch Barang Tersedia
     const { data: barangData, isLoading: isLoadingBarang } = useQuery({
         queryKey: ["barang-tersedia-list"],
         queryFn: () => getBarang(0, 1000, ""),

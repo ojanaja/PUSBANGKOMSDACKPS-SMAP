@@ -81,7 +81,6 @@ export function KembaliServiceFormModal({ isOpen, onClose, data }: KembaliServic
         e.preventDefault();
         if (!data) return;
 
-        // Basic validation: make sure perbaikan is filled
         for (const [_, val] of Object.entries(detailSelesai)) {
             if (!val.perbaikan) {
                 toast.error("Mohon isi tindakan perbaikan untuk semua barang");

@@ -30,7 +30,6 @@ import "leaflet/dist/leaflet.css";
 import { UploadCloud, Loader2, MapPin, X } from "lucide-react";
 import L from "leaflet";
 
-// Fix for default marker icon in react-leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -38,7 +37,6 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Component to dynamically update map center when coordinates change
 function ChangeView({ center }: { center: [number, number] }) {
     const map = useMap();
     map.setView(center, map.getZoom());

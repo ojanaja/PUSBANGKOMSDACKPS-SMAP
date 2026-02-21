@@ -34,7 +34,6 @@ export function PerawatanForm({ isOpen, onClose, preselectedBarang }: PerawatanF
     const [barangId, setBarangId] = useState("");
     const [keluhan, setKeluhan] = useState("");
 
-    // Reset when modal opens
     useEffect(() => {
         if (isOpen) {
             setFormData({
