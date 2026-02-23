@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserRequest {
 
@@ -26,4 +28,10 @@ public class UserRequest {
 
     @NotNull(message = "Role tidak boleh kosong")
     private User.Role role;
+
+    private String nip;
+    private String jabatan;
+    private String bidang;
+
+    private List<String> permissions;
 }

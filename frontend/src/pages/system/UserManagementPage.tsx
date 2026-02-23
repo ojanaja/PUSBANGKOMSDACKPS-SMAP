@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Plus, Search, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { getUsers } from "@/services/api/userApi";
-import type { User } from "@/services/api/userApi";
+import { getUsers, createUser, updateUser, deleteUser } from "@/services/api/userApi";
+import type { User, UserRequest } from "@/services/api/userApi";
+import { UserFormDialog } from "./components/UserFormDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,26 +21,62 @@ import { Badge } from "@/components/ui/badge";
 export default function UserManagementPage() {
     const [searchTerm, setSearchTerm] = useState("");
 
-    const { data: users, isLoading } = useQuery({
-        queryKey: ["users-list"],
-        queryFn: getUsers,
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+    const [page] = useState(0);
+    const { data: pagedData, isLoading, refetch } = useQuery({
+        queryKey: ["users-list", page],
+        queryFn: () => getUsers(page, 10, "id", "desc"),
     });
 
+    const users = pagedData?.content || [];
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleAddUser = () => {
-        toast.info("Fitur Tambah Pengguna baru dalam konstruksi.");
+        setSelectedUser(null);
+        setIsDialogOpen(true);
     };
 
     const handleEdit = (user: User) => {
-        toast.info(`Fitur Edit untuk ${user.username} sedang dikonstruksi.`);
+        setSelectedUser(user);
+        setIsDialogOpen(true);
     };
 
-    const handleDelete = (user: User) => {
-        toast.error(`Kewenangan hapus dibatasi. Tidak bisa menghapus ${user.username}`);
+    const handleDelete = async (user: User) => {
+        if (!confirm(`Apakah Anda yakin ingin menghapus pengguna ${user.username}?`)) return;
+        try {
+            await deleteUser(user.id);
+            toast.success("Pengguna berhasil dihapus.");
+            refetch();
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || "Gagal menghapus pengguna.");
+        }
+    };
+
+    const handleDialogSubmit = async (data: UserRequest) => {
+        setIsSubmitting(true);
+        try {
+            if (selectedUser) {
+                await updateUser(selectedUser.id, data);
+                toast.success("Pengguna berhasil diperbarui.");
+            } else {
+                await createUser(data);
+                toast.success("Pengguna berhasil ditambahkan.");
+            }
+            setIsDialogOpen(false);
+            refetch();
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || "Gagal menyimpan pengguna.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const filteredUsers = users?.filter(user =>
         user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.namaLengkap.toLowerCase().includes(searchTerm.toLowerCase())
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
     return (
@@ -100,11 +137,11 @@ export default function UserManagementPage() {
                             filteredUsers.map((user) => (
                                 <TableRow key={user.id}>
                                     <TableCell className="font-medium">{user.username}</TableCell>
-                                    <TableCell>{user.namaLengkap}</TableCell>
+                                    <TableCell>{user.name}</TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className={
                                             user.role === 'ADMIN' ? 'bg-purple-50 text-purple-700 border-purple-200' :
-                                                user.role === 'PETUGAS' ? 'bg-blue-50 text-foreground border-blue-200' :
+                                                user.role === 'PEGAWAI' ? 'bg-blue-50 text-foreground border-blue-200' :
                                                     'bg-slate-50 text-foreground border-slate-200'
                                         }>
                                             {user.role}
@@ -112,7 +149,7 @@ export default function UserManagementPage() {
                                     </TableCell>
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>
-                                        {user.isActive ? (
+                                        {user.active ? (
                                             <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Aktif</Badge>
                                         ) : (
                                             <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200">Nonaktif</Badge>
@@ -132,6 +169,14 @@ export default function UserManagementPage() {
                     </TableBody>
                 </Table>
             </div>
-        </div>
+
+            <UserFormDialog
+                isOpen={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+                user={selectedUser}
+                onSubmit={handleDialogSubmit}
+                isLoading={isSubmitting}
+            />
+        </div >
     );
 }

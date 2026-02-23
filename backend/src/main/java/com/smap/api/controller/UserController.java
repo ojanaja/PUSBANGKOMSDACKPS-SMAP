@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -51,6 +52,13 @@ public class UserController {
             @PathVariable Long id, @Valid @RequestBody UserRequest request) {
         UserResponse response = userService.updateUser(id, request);
         return ResponseEntity.ok(ApiResponse.success(response, "Berhasil memperbarui user"));
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<ApiResponse<UserResponse>> updateProfile(@Valid @RequestBody UserRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserResponse response = userService.updateProfile(username, request);
+        return ResponseEntity.ok(ApiResponse.success(response, "Berhasil memperbarui profile"));
     }
 
     @DeleteMapping("/{id}")

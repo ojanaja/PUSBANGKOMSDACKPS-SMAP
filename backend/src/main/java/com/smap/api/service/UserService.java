@@ -4,6 +4,7 @@ import com.smap.api.domain.dto.PagedResponse;
 import com.smap.api.domain.dto.UserRequest;
 import com.smap.api.domain.dto.UserResponse;
 import com.smap.api.domain.entity.User;
+import com.smap.api.domain.entity.UserPermission;
 import com.smap.api.exception.ResourceNotFoundException;
 import com.smap.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -52,11 +53,26 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setName(request.getName());
         user.setRole(request.getRole());
+        user.setNip(request.getNip());
+        user.setJabatan(request.getJabatan());
+        user.setBidang(request.getBidang());
+
+        if (request.getPermissions() != null) {
+            java.util.List<UserPermission> permissions = request.getPermissions().stream().map(perm -> {
+                String[] parts = perm.split(":");
+                return UserPermission.builder()
+                        .user(user)
+                        .menu(parts[0])
+                        .subMenu(parts.length > 1 ? parts[1] : "")
+                        .build();
+            }).toList();
+            user.getPermissions().addAll(permissions);
+        }
 
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
         } else {
-            user.setPassword(passwordEncoder.encode("password123")); 
+            user.setPassword(passwordEncoder.encode("password123"));
         }
 
         User saved = userRepository.save(user);
@@ -80,6 +96,45 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setName(request.getName());
         user.setRole(request.getRole());
+        user.setNip(request.getNip());
+        user.setJabatan(request.getJabatan());
+        user.setBidang(request.getBidang());
+
+        if (request.getPermissions() != null) {
+            user.getPermissions().clear();
+            java.util.List<UserPermission> permissions = request.getPermissions().stream().map(perm -> {
+                String[] parts = perm.split(":");
+                return UserPermission.builder()
+                        .user(user)
+                        .menu(parts[0])
+                        .subMenu(parts.length > 1 ? parts[1] : "")
+                        .build();
+            }).toList();
+            user.getPermissions().addAll(permissions);
+        }
+
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        User updated = userRepository.save(user);
+        return UserResponse.fromEntity(updated);
+    }
+
+    @Transactional
+    public UserResponse updateProfile(String username, UserRequest request) {
+        User user = userRepository.findByUsernameAndDeletedFalse(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
+
+        if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email sudah terdaftar!");
+        }
+
+        user.setEmail(request.getEmail());
+        user.setName(request.getName());
+        user.setNip(request.getNip());
+        user.setJabatan(request.getJabatan());
+        user.setBidang(request.getBidang());
 
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(request.getPassword()));
