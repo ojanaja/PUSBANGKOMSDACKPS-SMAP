@@ -45,7 +45,11 @@ export interface PeminjamanRequest {
     barangIds: number[];
     keperluan: string;
     keterangan?: string;
+    tglPinjam?: string;
     tglKembaliRencana?: string;
+    penanggungJawabName?: string;
+    penanggungJawabNip?: string;
+    penanggungJawabJabatan?: string;
 }
 
 export interface PeminjamanKembaliRequest {

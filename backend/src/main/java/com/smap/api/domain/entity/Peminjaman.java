@@ -53,6 +53,15 @@ public class Peminjaman extends BaseEntity {
     @Column(name = "berita_acara_url")
     private String beritaAcaraUrl;
 
+    @Column(name = "penanggung_jawab_input_name")
+    private String penanggungJawabInputName;
+
+    @Column(name = "penanggung_jawab_input_nip")
+    private String penanggungJawabInputNip;
+
+    @Column(name = "penanggung_jawab_input_jabatan")
+    private String penanggungJawabInputJabatan;
+
     @OneToMany(mappedBy = "peminjaman", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<PeminjamanDetail> detailBarang = new ArrayList<>();

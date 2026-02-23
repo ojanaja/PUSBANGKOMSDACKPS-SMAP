@@ -17,5 +17,13 @@ public class PeminjamanRequest {
 
     private String keterangan;
 
+    private LocalDate tglPinjam;
+
     private LocalDate tglKembaliRencana;
+
+    private String penanggungJawabName;
+
+    private String penanggungJawabNip;
+
+    private String penanggungJawabJabatan;
 }

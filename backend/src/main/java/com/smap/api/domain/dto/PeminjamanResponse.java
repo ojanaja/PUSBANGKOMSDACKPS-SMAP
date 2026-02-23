@@ -54,15 +54,15 @@ public class PeminjamanResponse {
                                 .penanggungJawabName(
                                                 peminjaman.getPenanggungJawab() != null
                                                                 ? peminjaman.getPenanggungJawab().getName()
-                                                                : null)
+                                                                : peminjaman.getPenanggungJawabInputName())
                                 .penanggungJawabNip(
                                                 peminjaman.getPenanggungJawab() != null
                                                                 ? peminjaman.getPenanggungJawab().getNip()
-                                                                : null)
+                                                                : peminjaman.getPenanggungJawabInputNip())
                                 .penanggungJawabJabatan(
                                                 peminjaman.getPenanggungJawab() != null
                                                                 ? peminjaman.getPenanggungJawab().getJabatan()
-                                                                : null)
+                                                                : peminjaman.getPenanggungJawabInputJabatan())
                                 .penanggungJawabBidang(
                                                 peminjaman.getPenanggungJawab() != null
                                                                 ? peminjaman.getPenanggungJawab().getBidang()
