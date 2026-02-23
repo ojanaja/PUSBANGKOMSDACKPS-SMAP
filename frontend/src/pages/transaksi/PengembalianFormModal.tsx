@@ -103,8 +103,8 @@ export function PengembalianFormModal({ isOpen, onClose, data }: PengembalianFor
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <form onSubmit={handleSubmit}>
+            <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <DialogHeader>
                         <DialogTitle>Formulir Pengembalian Pinjaman</DialogTitle>
                         <DialogDescription>
@@ -112,59 +112,60 @@ export function PengembalianFormModal({ isOpen, onClose, data }: PengembalianFor
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="grid gap-6 py-4">
-                        <div className="bg-slate-50 dark:bg-slate-900 border rounded-lg p-4 space-y-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="keterangan" className="text-right font-medium">Keterangan Kembali</Label>
-                                <Input
-                                    id="keterangan"
-                                    className="col-span-3"
-                                    placeholder="Catatan pengembalian barang..."
-                                    value={keterangan}
-                                    onChange={(e) => setKeterangan(e.target.value)}
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="fileBA" className="text-right font-medium">Berita Acara (Max 2MB)</Label>
-                                <Input
-                                    id="fileBA"
-                                    type="file"
-                                    accept="application/pdf,image/jpeg,image/png"
-                                    className="col-span-3 text-sm"
-                                    onChange={(e) => setFileBA(e.target.files ? e.target.files[0] : null)}
-                                />
-                            </div>
+                    <div className="bg-slate-50 dark:bg-slate-900 border rounded-lg p-4 space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-[150px_1fr] items-center gap-2 md:gap-4">
+                            <Label htmlFor="keterangan" className="md:text-right font-medium">Keterangan Kembali</Label>
+                            <Input
+                                id="keterangan"
+                                placeholder="Catatan pengembalian barang..."
+                                value={keterangan}
+                                onChange={(e) => setKeterangan(e.target.value)}
+                            />
                         </div>
 
-                        <div>
-                            <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">Daftar Barang Dikembalikan</h3>
-                            <div className="rounded-md border overflow-x-auto">
-                                <Table>
-                                    <TableHeader className="bg-slate-50 dark:bg-slate-900 text-xs">
-                                        <TableRow>
-                                            <TableHead className="w-12">No.</TableHead>
-                                            <TableHead>Barang</TableHead>
-                                            <TableHead>Kode / NUP</TableHead>
-                                            <TableHead>Kondisi Pinjam</TableHead>
-                                            <TableHead className="w-48">Kondisi Kembali</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {data.detailBarang?.map((detail, index) => (
-                                            <TableRow key={detail.id}>
-                                                <TableCell>{index + 1}</TableCell>
-                                                <TableCell className="font-medium text-sm">{detail.namaBarang}</TableCell>
-                                                <TableCell className="text-sm">
-                                                    <div className="flex flex-col">
-                                                        <span>{detail.kodeBarang}</span>
-                                                        <span className="text-xs text-muted-foreground">{detail.nup || '-'}</span>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Badge variant="secondary" className="font-normal text-xs">{detail.kondisiPinjam}</Badge>
-                                                </TableCell>
-                                                <TableCell>
+                        <div className="grid grid-cols-1 md:grid-cols-[150px_1fr] items-center gap-2 md:gap-4">
+                            <Label htmlFor="fileBA" className="md:text-right font-medium">Berita Acara (Max 2MB)</Label>
+                            <Input
+                                id="fileBA"
+                                type="file"
+                                accept="application/pdf,image/jpeg,image/png"
+                                className="text-sm file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200"
+                                onChange={(e) => setFileBA(e.target.files ? e.target.files[0] : null)}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider text-muted-foreground">
+                            Daftar Barang Dikembalikan
+                        </h3>
+                        <div className="rounded-md border overflow-x-auto">
+                            <Table className="min-w-[600px]">
+                                <TableHeader className="bg-slate-50 dark:bg-slate-900 text-xs whitespace-nowrap">
+                                    <TableRow>
+                                        <TableHead className="w-12">No.</TableHead>
+                                        <TableHead>Barang</TableHead>
+                                        <TableHead>Kode / NUP</TableHead>
+                                        <TableHead>Kondisi Pinjam</TableHead>
+                                        <TableHead className="w-48">Kondisi Kembali</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {data.detailBarang?.map((detail, index) => (
+                                        <TableRow key={detail.id}>
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell className="font-medium text-sm min-w-[150px]">{detail.namaBarang}</TableCell>
+                                            <TableCell className="text-sm whitespace-nowrap">
+                                                <div className="flex flex-col">
+                                                    <span>{detail.kodeBarang}</span>
+                                                    <span className="text-xs text-muted-foreground">{detail.nup || '-'}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="whitespace-nowrap">
+                                                <Badge variant="secondary" className="font-normal text-xs">{detail.kondisiPinjam}</Badge>
+                                            </TableCell>
+                                            <TableCell className="min-w-[150px]">
+                                                <div className="w-full">
                                                     <Select
                                                         value={kondisiMap[detail.barangId] || detail.kondisiPinjam}
                                                         onValueChange={(val) => handleKondisiChange(detail.barangId, val)}
@@ -178,16 +179,23 @@ export function PengembalianFormModal({ isOpen, onClose, data }: PengembalianFor
                                                             <SelectItem value="RUSAK_BERAT">RUSAK BERAT</SelectItem>
                                                         </SelectContent>
                                                     </Select>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    {(!data.detailBarang || data.detailBarang.length === 0) && (
+                                        <TableRow>
+                                            <TableCell colSpan={5} className="text-center h-16 text-muted-foreground">
+                                                Belum ada rincian barang
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
                         </div>
                     </div>
 
-                    <DialogFooter>
+                    <DialogFooter className="mt-4">
                         <Button type="button" variant="outline" onClick={onClose} disabled={mutation.isPending}>Batal</Button>
                         <Button type="submit" disabled={mutation.isPending} className="bg-emerald-600 hover:bg-emerald-700 text-white">
                             {mutation.isPending ? "Memproses..." : "Selesaikan Pengembalian"}
