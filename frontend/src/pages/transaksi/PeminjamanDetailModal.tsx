@@ -27,7 +27,7 @@ export function PeminjamanDetailModal({ isOpen, onClose, data }: PeminjamanDetai
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="w-[95vw] sm:max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle className="text-xl">Detail Peminjaman Barang</DialogTitle>
                     <DialogDescription>
@@ -39,16 +39,18 @@ export function PeminjamanDetailModal({ isOpen, onClose, data }: PeminjamanDetai
                     {/* Kolom Kiri: Info Utama & Peminjam */}
                     <div className="space-y-4">
                         <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border">
-                            <h3 className="font-semibold mb-3 text-sm text-muted-foreground uppercase tracking-wider">Informasi Registrasi</h3>
-                            <div className="grid grid-cols-3 gap-2 text-sm">
+                            <h3 className="font-semibold mb-3 text-sm text-muted-foreground uppercase tracking-wider">
+                                Informasi Registrasi
+                            </h3>
+                            <div className="grid grid-cols-[110px_1fr] gap-x-2 gap-y-3 text-sm">
                                 <div className="text-muted-foreground">No. Register</div>
-                                <div className="col-span-2 font-medium">{data.noRegister}</div>
+                                <div className="font-medium break-words">{data.noRegister}</div>
 
-                                <div className="text-muted-foreground">Tanggal</div>
-                                <div className="col-span-2">{new Date(data.createdAt).toLocaleDateString('id-ID')}</div>
+                                <div className="text-muted-foreground flex items-center">Tanggal</div>
+                                <div>{new Date(data.createdAt).toLocaleDateString('id-ID')}</div>
 
-                                <div className="text-muted-foreground">Status</div>
-                                <div className="col-span-2">
+                                <div className="text-muted-foreground flex items-center">Status</div>
+                                <div>
                                     {data.status === 'DIPINJAM' ? (
                                         <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">Di Pinjam</Badge>
                                     ) : (
@@ -56,22 +58,24 @@ export function PeminjamanDetailModal({ isOpen, onClose, data }: PeminjamanDetai
                                     )}
                                 </div>
 
-                                <div className="text-muted-foreground mt-2">Tgl Pinjam</div>
-                                <div className="col-span-2 mt-2">{new Date(data.tglPinjam).toLocaleDateString('id-ID')}</div>
+                                <div className="text-muted-foreground">Tgl Pinjam</div>
+                                <div>{new Date(data.tglPinjam).toLocaleDateString('id-ID')}</div>
 
                                 <div className="text-muted-foreground">Tgl Kembali</div>
-                                <div className="col-span-2">{data.tglKembaliRencana ? new Date(data.tglKembaliRencana).toLocaleDateString('id-ID') : '-'}</div>
+                                <div>{data.tglKembaliRencana ? new Date(data.tglKembaliRencana).toLocaleDateString('id-ID') : '-'}</div>
                             </div>
                         </div>
 
                         <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border">
-                            <h3 className="font-semibold mb-3 text-sm text-muted-foreground uppercase tracking-wider">Tujuan & Keterangan</h3>
-                            <div className="grid grid-cols-3 gap-2 text-sm">
+                            <h3 className="font-semibold mb-3 text-sm text-muted-foreground uppercase tracking-wider">
+                                Tujuan & Keterangan
+                            </h3>
+                            <div className="grid grid-cols-[110px_1fr] gap-x-2 gap-y-3 text-sm">
                                 <div className="text-muted-foreground">Keperluan</div>
-                                <div className="col-span-2 font-medium">{data.keperluan}</div>
+                                <div className="font-medium">{data.keperluan}</div>
 
                                 <div className="text-muted-foreground">Keterangan</div>
-                                <div className="col-span-2">{data.keterangan || '-'}</div>
+                                <div>{data.keterangan || '-'}</div>
                             </div>
                         </div>
                     </div>
@@ -79,30 +83,34 @@ export function PeminjamanDetailModal({ isOpen, onClose, data }: PeminjamanDetai
                     {/* Kolom Kanan: Peminjam & Penanggung Jawab */}
                     <div className="space-y-4">
                         <div className="bg-blue-50 dark:bg-slate-900 p-4 rounded-lg border border-blue-100 dark:border-slate-800">
-                            <h3 className="font-semibold mb-3 text-sm text-foreground dark:text-foreground uppercase tracking-wider">Data Peminjam</h3>
-                            <div className="grid grid-cols-3 gap-2 text-sm">
+                            <h3 className="font-semibold mb-3 text-sm text-foreground uppercase tracking-wider">
+                                Data Peminjam
+                            </h3>
+                            <div className="grid grid-cols-[110px_1fr] gap-x-2 gap-y-3 text-sm">
                                 <div className="text-muted-foreground">Nama</div>
-                                <div className="col-span-2 font-medium">{data.peminjamName}</div>
+                                <div className="font-medium">{data.peminjamName}</div>
 
                                 <div className="text-muted-foreground">Bidang</div>
-                                <div className="col-span-2">{data.peminjamBidang || '-'}</div>
+                                <div>{data.peminjamBidang || '-'}</div>
 
                                 <div className="text-muted-foreground">Jabatan</div>
-                                <div className="col-span-2">{data.peminjamJabatan || '-'}</div>
+                                <div>{data.peminjamJabatan || '-'}</div>
 
                                 <div className="text-muted-foreground">NIP</div>
-                                <div className="col-span-2">{data.peminjamNip || '-'}</div>
+                                <div>{data.peminjamNip || '-'}</div>
                             </div>
                         </div>
 
                         <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border">
-                            <h3 className="font-semibold mb-3 text-sm text-muted-foreground uppercase tracking-wider">Penanggung Jawab (PJ)</h3>
-                            <div className="grid grid-cols-3 gap-2 text-sm">
+                            <h3 className="font-semibold mb-3 text-sm text-muted-foreground uppercase tracking-wider">
+                                Penanggung Jawab (PJ)
+                            </h3>
+                            <div className="grid grid-cols-[110px_1fr] gap-x-2 gap-y-3 text-sm">
                                 <div className="text-muted-foreground">Nama PJ</div>
-                                <div className="col-span-2 font-medium">{data.penanggungJawabName || '-'}</div>
+                                <div className="font-medium">{data.penanggungJawabName || '-'}</div>
 
                                 <div className="text-muted-foreground">NIP PJ</div>
-                                <div className="col-span-2">{data.penanggungJawabNip || '-'}</div>
+                                <div>{data.penanggungJawabNip || '-'}</div>
                             </div>
                         </div>
                     </div>
@@ -110,9 +118,9 @@ export function PeminjamanDetailModal({ isOpen, onClose, data }: PeminjamanDetai
 
                 <div className="mt-4">
                     <h3 className="font-semibold mb-3">Daftar Barang Dipinjam</h3>
-                    <div className="rounded-md border">
-                        <Table>
-                            <TableHeader className="bg-slate-50 dark:bg-slate-900">
+                    <div className="rounded-md border overflow-x-auto">
+                        <Table className="min-w-[600px]">
+                            <TableHeader className="bg-slate-50 dark:bg-slate-900 whitespace-nowrap">
                                 <TableRow>
                                     <TableHead className="w-12">No.</TableHead>
                                     <TableHead>Barang</TableHead>
@@ -126,23 +134,27 @@ export function PeminjamanDetailModal({ isOpen, onClose, data }: PeminjamanDetai
                                 {data.detailBarang?.map((detail, index) => (
                                     <TableRow key={detail.id}>
                                         <TableCell>{index + 1}</TableCell>
-                                        <TableCell className="font-medium">{detail.namaBarang}</TableCell>
-                                        <TableCell>
+                                        <TableCell className="font-medium min-w-[150px]">{detail.namaBarang}</TableCell>
+                                        <TableCell className="whitespace-nowrap">
                                             <div className="flex flex-col">
                                                 <span>{detail.kodeBarang}</span>
                                                 <span className="text-xs text-muted-foreground">{detail.nup || '-'}</span>
                                             </div>
                                         </TableCell>
-                                        <TableCell>{detail.keterangan || '-'}</TableCell>
+                                        <TableCell className="min-w-[150px]">{detail.keterangan || '-'}</TableCell>
                                         <TableCell>
-                                            <Badge variant="secondary" className="font-normal text-xs">{detail.kondisiPinjam}</Badge>
+                                            <Badge variant="secondary" className="font-normal text-xs whitespace-nowrap">
+                                                {detail.kondisiPinjam}
+                                            </Badge>
                                         </TableCell>
                                         <TableCell className="text-right">1</TableCell>
                                     </TableRow>
                                 ))}
                                 {(!data.detailBarang || data.detailBarang.length === 0) && (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="text-center h-16 text-muted-foreground">Belum ada rincian barang</TableCell>
+                                        <TableCell colSpan={6} className="text-center h-16 text-muted-foreground">
+                                            Belum ada rincian barang
+                                        </TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
