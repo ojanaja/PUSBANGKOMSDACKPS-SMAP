@@ -23,25 +23,28 @@ public class PeminjamanController {
     private final PeminjamanService peminjamanService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PagedResponse<PeminjamanResponse>>> getAllPeminjaman(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDir) {
-        PagedResponse<PeminjamanResponse> response = peminjamanService.getAllPeminjaman(page, size, sortDir, sortBy);
+            @RequestParam(defaultValue = "desc") String sortDir,
+            Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        PagedResponse<PeminjamanResponse> response = peminjamanService.getAllPeminjaman(page, size, sortDir, sortBy,
+                userDetails.getUsername());
         return ResponseEntity.ok(ApiResponse.success(response, "Berhasil memuat data peminjaman"));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PeminjamanResponse>> getPeminjamanById(@PathVariable Long id) {
         PeminjamanResponse response = peminjamanService.getPeminjamanById(id);
         return ResponseEntity.ok(ApiResponse.success(response, "Berhasil memuat detail peminjaman"));
     }
 
     @PostMapping("/pinjam")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PeminjamanResponse>> pinjamBarang(
             @Valid @RequestBody PeminjamanRequest request, Authentication authentication) {
 
@@ -53,7 +56,7 @@ public class PeminjamanController {
     }
 
     @PostMapping(value = "/{id}/kembali", consumes = { "multipart/form-data" })
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PeminjamanResponse>> kembalikanBarang(
             @PathVariable Long id,
             @RequestPart("request") @Valid PeminjamanKembaliRequest request,

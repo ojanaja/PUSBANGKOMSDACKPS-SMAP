@@ -36,11 +36,22 @@ public class PeminjamanService {
     private final FileStorageService fileStorageService;
 
     @Transactional(readOnly = true)
-    public PagedResponse<PeminjamanResponse> getAllPeminjaman(int page, int size, String sortDir, String sortBy) {
+    public PagedResponse<PeminjamanResponse> getAllPeminjaman(int page, int size, String sortDir, String sortBy,
+            String username) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Peminjaman> peminjamanPage = peminjamanRepository.findAll(pageable);
+
+        User currentUser = userRepository.findByUsernameAndDeletedFalse(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User tidak ditemukan"));
+
+        Page<Peminjaman> peminjamanPage;
+        if (currentUser.getRole() == User.Role.ADMIN) {
+            peminjamanPage = peminjamanRepository.findAll(pageable);
+        } else {
+            peminjamanPage = peminjamanRepository.findByPeminjamAndDeletedFalse(currentUser, pageable);
+        }
+
         return PagedResponse.of(peminjamanPage.map(PeminjamanResponse::fromEntity));
     }
 
@@ -66,8 +77,11 @@ public class PeminjamanService {
                 .peminjam(peminjam)
                 .keperluan(request.getKeperluan())
                 .keterangan(request.getKeterangan())
-                .tglPinjam(LocalDate.now())
+                .tglPinjam(request.getTglPinjam() != null ? request.getTglPinjam() : LocalDate.now())
                 .tglKembaliRencana(request.getTglKembaliRencana())
+                .penanggungJawabInputName(request.getPenanggungJawabName())
+                .penanggungJawabInputNip(request.getPenanggungJawabNip())
+                .penanggungJawabInputJabatan(request.getPenanggungJawabJabatan())
                 .status(Peminjaman.StatusPeminjaman.DIPINJAM)
                 .build();
 

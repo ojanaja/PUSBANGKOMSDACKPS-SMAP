@@ -14,6 +14,8 @@ import java.util.List;
 public interface PeminjamanRepository extends JpaRepository<Peminjaman, Long> {
     long countByStatusAndDeletedFalse(Peminjaman.StatusPeminjaman status);
 
+    Page<Peminjaman> findByPeminjamAndDeletedFalse(com.smap.api.domain.entity.User peminjam, Pageable pageable);
+
     @Query("SELECT DISTINCT p FROM Peminjaman p JOIN p.detailBarang pd WHERE pd.barang.id = :barangId AND p.deleted = false ORDER BY p.createdAt DESC")
     List<Peminjaman> findHistoryByBarangId(@Param("barangId") Long barangId);
 
