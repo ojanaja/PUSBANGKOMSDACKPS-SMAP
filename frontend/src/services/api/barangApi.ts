@@ -59,7 +59,7 @@ export interface BarangRequest {
     pemakai?: string;
 }
 
-export const getBarang = async (page = 0, size = 10, search = ''): Promise<PagedData<Barang>> => {
+export const getBarang = async (page = 0, size = 10, _search = ''): Promise<PagedData<Barang>> => {
     const response = await apiClient.get<ApiResponse<PagedData<Barang>>>(`/barang?page=${page}&size=${size}`);
     return response.data.data;
 };

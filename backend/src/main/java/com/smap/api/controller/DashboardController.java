@@ -18,7 +18,7 @@ public class DashboardController {
     private final DashboardService dashboardService;
 
     @GetMapping("/summary")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<DashboardResponse>> getSummary() {
         DashboardResponse summary = dashboardService.getDashboardSummary();
         return ResponseEntity.ok(ApiResponse.success(summary, "Berhasil memuat data dashboard"));

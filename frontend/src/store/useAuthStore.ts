@@ -5,11 +5,11 @@ interface User {
     id: number;
     username: string;
     name: string;
-    role: 'ADMIN' | 'PETUGAS' | 'PEMINJAM' | 'VIEWER';
+    role: 'ADMIN' | 'PEGAWAI';
     nip?: string;
     jabatan?: string;
     bidang?: string;
-    menuAccess?: string[];
+    permissions?: string[];
 }
 
 interface AuthState {

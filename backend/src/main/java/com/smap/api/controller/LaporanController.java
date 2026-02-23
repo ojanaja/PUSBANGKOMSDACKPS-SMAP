@@ -20,7 +20,7 @@ public class LaporanController {
     private final LaporanService laporanService;
 
     @GetMapping("/barang/csv")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<Resource> exportDaftarBarangCsv() {
         String filename = "laporan_master_barang.csv";
         InputStreamResource file = new InputStreamResource(laporanService.exportDaftarBarangCsv());

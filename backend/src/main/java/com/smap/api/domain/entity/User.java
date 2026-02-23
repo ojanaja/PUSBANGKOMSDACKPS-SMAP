@@ -3,6 +3,9 @@ package com.smap.api.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -41,7 +44,11 @@ public class User extends BaseEntity {
     @Column(name = "bidang")
     private String bidang;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<UserPermission> permissions = new ArrayList<>();
+
     public enum Role {
-        ADMIN, PETUGAS, PEMINJAM, VIEWER
+        ADMIN, PEGAWAI
     }
 }

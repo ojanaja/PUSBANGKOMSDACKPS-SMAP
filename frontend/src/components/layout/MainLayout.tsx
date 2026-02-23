@@ -1,7 +1,6 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { useAuthStore } from '@/store/useAuthStore';
-import { Button } from '@/components/ui/button';
 import { LogOut, User, ChevronDown } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import {
@@ -27,6 +26,15 @@ export const MainLayout = () => {
         navigate('/login', { replace: true });
     };
 
+    const hasAccess = (menu: string, subMenu?: string) => {
+        if (user?.role === 'ADMIN') return true;
+        if (!user?.permissions) return false;
+        if (subMenu) {
+            return user.permissions.includes(`${menu}:${subMenu}`);
+        }
+        return user.permissions.some(p => p.startsWith(`${menu}:`));
+    };
+
     return (
         <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900">
             {/* Top Navbar */}
@@ -43,69 +51,83 @@ export const MainLayout = () => {
                     <nav className="hidden md:flex items-center space-x-2 flex-1">
                         <Link to="/dashboard" className={navLinkClass('/dashboard')}>Dashboard</Link>
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className={navLinkClass('/transaksi')}>
-                                Transaksi <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-56">
-                                <DropdownMenuItem asChild><Link to="/transaksi/peminjaman" className="w-full cursor-pointer">Pengajuan Pinjaman</Link></DropdownMenuItem>
-                                <DropdownMenuItem asChild><Link to="/transaksi/pengembalian-pinjaman" className="w-full cursor-pointer">Pengembalian Pinjaman</Link></DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild><Link to="/transaksi/perawatan" className="w-full cursor-pointer">Pengajuan Perawatan</Link></DropdownMenuItem>
-                                <DropdownMenuItem asChild><Link to="/transaksi/kembali-service" className="w-full cursor-pointer">Kembali Service</Link></DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {hasAccess('TRANSAKSI') && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className={navLinkClass('/transaksi')}>
+                                    Transaksi <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" className="w-56">
+                                    {hasAccess('TRANSAKSI', 'Pengajuan Pinjaman') && <DropdownMenuItem asChild><Link to="/transaksi/peminjaman" className="w-full cursor-pointer">Pengajuan Pinjaman</Link></DropdownMenuItem>}
+                                    {hasAccess('TRANSAKSI', 'Pengembalian Pinjaman') && <DropdownMenuItem asChild><Link to="/transaksi/pengembalian-pinjaman" className="w-full cursor-pointer">Pengembalian Pinjaman</Link></DropdownMenuItem>}
+                                    <DropdownMenuSeparator />
+                                    {hasAccess('TRANSAKSI', 'Pengajuan Perawatan') && <DropdownMenuItem asChild><Link to="/transaksi/perawatan" className="w-full cursor-pointer">Pengajuan Perawatan</Link></DropdownMenuItem>}
+                                    {hasAccess('TRANSAKSI', 'Kembali Service') && <DropdownMenuItem asChild><Link to="/transaksi/kembali-service" className="w-full cursor-pointer">Kembali Service</Link></DropdownMenuItem>}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className={navLinkClass('/laporan')}>
-                                Laporan <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-52">
-                                <DropdownMenuItem asChild><Link to="/laporan/peminjaman" className="w-full cursor-pointer">Peminjaman</Link></DropdownMenuItem>
-                                <DropdownMenuItem asChild><Link to="/laporan/perawatan" className="w-full cursor-pointer">Perawatan</Link></DropdownMenuItem>
-                                <DropdownMenuItem asChild><Link to="/laporan/jatuh-tempo" className="w-full cursor-pointer">Jatuh Tempo</Link></DropdownMenuItem>
-                                <DropdownMenuItem asChild><Link to="/laporan/daftar-barang" className="w-full cursor-pointer">Daftar Barang</Link></DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {hasAccess('LAPORAN') && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className={navLinkClass('/laporan')}>
+                                    Laporan <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" className="w-52">
+                                    {hasAccess('LAPORAN', 'Peminjaman') && <DropdownMenuItem asChild><Link to="/laporan/peminjaman" className="w-full cursor-pointer">Peminjaman</Link></DropdownMenuItem>}
+                                    {hasAccess('LAPORAN', 'Perawatan') && <DropdownMenuItem asChild><Link to="/laporan/perawatan" className="w-full cursor-pointer">Perawatan</Link></DropdownMenuItem>}
+                                    {hasAccess('LAPORAN', 'Jatuh Tempo') && <DropdownMenuItem asChild><Link to="/laporan/jatuh-tempo" className="w-full cursor-pointer">Jatuh Tempo</Link></DropdownMenuItem>}
+                                    {hasAccess('LAPORAN', 'Daftar Barang') && <DropdownMenuItem asChild><Link to="/laporan/daftar-barang" className="w-full cursor-pointer">Daftar Barang</Link></DropdownMenuItem>}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className={navLinkClass('/informasi')}>
-                                Informasi <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-48">
-                                <DropdownMenuItem asChild><Link to="/informasi/barang" className="w-full cursor-pointer">Barang</Link></DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {hasAccess('INFORMASI') && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className={navLinkClass('/informasi')}>
+                                    Informasi <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" className="w-48">
+                                    {hasAccess('INFORMASI', 'Barang') && <DropdownMenuItem asChild><Link to="/informasi/barang" className="w-full cursor-pointer">Barang</Link></DropdownMenuItem>}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className={navLinkClass('/system')}>
-                                System <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-52">
-                                <DropdownMenuItem asChild><Link to="/system/users" className="w-full cursor-pointer">User</Link></DropdownMenuItem>
-                                <DropdownMenuItem asChild><Link to="/system/roles" className="w-full cursor-pointer">Manajemen Hak Akses</Link></DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {hasAccess('SYSTEM') && (
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className={navLinkClass('/system')}>
+                                    System <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" className="w-52">
+                                    {hasAccess('SYSTEM', 'User') && <DropdownMenuItem asChild><Link to="/system/users" className="w-full cursor-pointer">User</Link></DropdownMenuItem>}
+                                    {hasAccess('SYSTEM', 'Role') && <DropdownMenuItem asChild><Link to="/system/roles" className="w-full cursor-pointer">Manajemen Hak Akses</Link></DropdownMenuItem>}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
                     </nav>
 
                     {/* Right side Profile & Logout */}
                     <div className="flex items-center gap-3 md:gap-4 ml-auto pl-4 shrink-0">
                         <ThemeToggle />
-                        <div className="flex items-center gap-2 text-sm text-foreground dark:text-slate-300 bg-slate-100 dark:bg-slate-800 py-1.5 px-3 rounded-full border border-slate-200 dark:border-slate-700">
-                            <User className="w-4 h-4 text-foreground dark:text-foreground" />
-                            <span className="font-semibold hidden sm:inline-block">
-                                {user?.name || 'Admin'} <span className="opacity-60 text-xs ml-1 font-normal">({user?.role})</span>
-                            </span>
-                        </div>
-                        <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={handleLogout}
-                            className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 shadow-sm dark:bg-red-950 dark:hover:bg-red-900 dark:text-red-300 dark:border-red-800"
-                        >
-                            <LogOut className="w-4 h-4 sm:mr-2" />
-                            <span className="hidden sm:inline">Keluar</span>
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="flex items-center gap-2 text-sm text-foreground dark:text-slate-300 bg-slate-100 dark:bg-slate-800 py-1.5 px-3 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                <User className="w-4 h-4 text-foreground dark:text-foreground" />
+                                <span className="font-semibold hidden sm:inline-block">
+                                    {user?.name || 'Admin'} <span className="opacity-60 text-xs ml-1 font-normal">({user?.role})</span>
+                                </span>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-48">
+                                <DropdownMenuItem asChild>
+                                    <Link to="/system/profile" className="w-full cursor-pointer flex items-center">
+                                        <User className="mr-2 h-4 w-4" />
+                                        <span>My Profile</span>
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onSelect={handleLogout} className="text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950">
+                                    <LogOut className="mr-2 h-4 w-4" />
+                                    <span>Keluar</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
 
@@ -113,49 +135,57 @@ export const MainLayout = () => {
                 <div className="md:hidden border-t border-slate-200 dark:border-slate-800 py-2 px-4 flex overflow-x-auto gap-2 text-sm whitespace-nowrap bg-white dark:bg-slate-900 shadow-sm">
                     <Link to="/dashboard" className={navLinkClass('/dashboard')}>Dashboard</Link>
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className={navLinkClass('/transaksi')}>
-                            Transaksi <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start" className="w-56">
-                            <DropdownMenuItem asChild><Link to="/transaksi/peminjaman" className="w-full cursor-pointer">Pengajuan Pinjaman</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link to="/transaksi/pengembalian-pinjaman" className="w-full cursor-pointer">Pengembalian Pinjaman</Link></DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem asChild><Link to="/transaksi/perawatan" className="w-full cursor-pointer">Pengajuan Perawatan</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link to="/transaksi/kembali-service" className="w-full cursor-pointer">Kembali Service</Link></DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {hasAccess('TRANSAKSI') && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className={navLinkClass('/transaksi')}>
+                                Transaksi <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-56">
+                                {hasAccess('TRANSAKSI', 'Pengajuan Pinjaman') && <DropdownMenuItem asChild><Link to="/transaksi/peminjaman" className="w-full cursor-pointer">Pengajuan Pinjaman</Link></DropdownMenuItem>}
+                                {hasAccess('TRANSAKSI', 'Pengembalian Pinjaman') && <DropdownMenuItem asChild><Link to="/transaksi/pengembalian-pinjaman" className="w-full cursor-pointer">Pengembalian Pinjaman</Link></DropdownMenuItem>}
+                                <DropdownMenuSeparator />
+                                {hasAccess('TRANSAKSI', 'Pengajuan Perawatan') && <DropdownMenuItem asChild><Link to="/transaksi/perawatan" className="w-full cursor-pointer">Pengajuan Perawatan</Link></DropdownMenuItem>}
+                                {hasAccess('TRANSAKSI', 'Kembali Service') && <DropdownMenuItem asChild><Link to="/transaksi/kembali-service" className="w-full cursor-pointer">Kembali Service</Link></DropdownMenuItem>}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className={navLinkClass('/laporan')}>
-                            Laporan <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start" className="w-52">
-                            <DropdownMenuItem asChild><Link to="/laporan/peminjaman" className="w-full cursor-pointer">Peminjaman</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link to="/laporan/perawatan" className="w-full cursor-pointer">Perawatan</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link to="/laporan/jatuh-tempo" className="w-full cursor-pointer">Jatuh Tempo</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link to="/laporan/daftar-barang" className="w-full cursor-pointer">Daftar Barang</Link></DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {hasAccess('LAPORAN') && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className={navLinkClass('/laporan')}>
+                                Laporan <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-52">
+                                {hasAccess('LAPORAN', 'Peminjaman') && <DropdownMenuItem asChild><Link to="/laporan/peminjaman" className="w-full cursor-pointer">Peminjaman</Link></DropdownMenuItem>}
+                                {hasAccess('LAPORAN', 'Perawatan') && <DropdownMenuItem asChild><Link to="/laporan/perawatan" className="w-full cursor-pointer">Perawatan</Link></DropdownMenuItem>}
+                                {hasAccess('LAPORAN', 'Jatuh Tempo') && <DropdownMenuItem asChild><Link to="/laporan/jatuh-tempo" className="w-full cursor-pointer">Jatuh Tempo</Link></DropdownMenuItem>}
+                                {hasAccess('LAPORAN', 'Daftar Barang') && <DropdownMenuItem asChild><Link to="/laporan/daftar-barang" className="w-full cursor-pointer">Daftar Barang</Link></DropdownMenuItem>}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className={navLinkClass('/informasi')}>
-                            Informasi <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start" className="w-48">
-                            <DropdownMenuItem asChild><Link to="/informasi/barang" className="w-full cursor-pointer">Barang</Link></DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {hasAccess('INFORMASI') && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className={navLinkClass('/informasi')}>
+                                Informasi <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-48">
+                                {hasAccess('INFORMASI', 'Barang') && <DropdownMenuItem asChild><Link to="/informasi/barang" className="w-full cursor-pointer">Barang</Link></DropdownMenuItem>}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className={navLinkClass('/system')}>
-                            System <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start" className="w-52">
-                            <DropdownMenuItem asChild><Link to="/system/users" className="w-full cursor-pointer">User</Link></DropdownMenuItem>
-                            <DropdownMenuItem asChild><Link to="/system/roles" className="w-full cursor-pointer">Manajemen Hak Akses</Link></DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    {hasAccess('SYSTEM') && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className={navLinkClass('/system')}>
+                                System <ChevronDown className="w-4 h-4 ml-1 opacity-50" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-52">
+                                {hasAccess('SYSTEM', 'User') && <DropdownMenuItem asChild><Link to="/system/users" className="w-full cursor-pointer">User</Link></DropdownMenuItem>}
+                                {hasAccess('SYSTEM', 'Role') && <DropdownMenuItem asChild><Link to="/system/roles" className="w-full cursor-pointer">Manajemen Hak Akses</Link></DropdownMenuItem>}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                 </div>
             </header>
 

@@ -308,6 +308,9 @@ export function BarangTracerModal({ isOpen, onClose, barang }: BarangTracerModal
                                                         <TableCell className="border-r font-medium text-foreground">{history.diajukanOlehName || '-'}</TableCell>
                                                         <TableCell className="border-r">
                                                             <div className="text-sm font-medium">{history.hal}</div>
+                                                            <div className="text-xs text-rose-600 dark:text-rose-400 font-semibold mt-1">
+                                                                Keluhan: {history.detailBarang?.find((d: any) => d.barangId === barang.id)?.gejala || '-'}
+                                                            </div>
                                                             {history.keterangan && <div className="text-xs text-muted-foreground mt-1">{history.keterangan}</div>}
                                                         </TableCell>
                                                         <TableCell className="whitespace-nowrap">

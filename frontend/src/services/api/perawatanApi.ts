@@ -61,7 +61,7 @@ export interface PerawatanSelesaiRequest {
     }>;
 }
 
-export const getPerawatan = async (page = 0, size = 10, search = ''): Promise<PagedData<Perawatan>> => {
+export const getPerawatan = async (page = 0, size = 10, _search = ''): Promise<PagedData<Perawatan>> => {
     const response = await apiClient.get<ApiResponse<PagedData<Perawatan>>>(`/transaksi/perawatan?page=${page}&size=${size}`);
     return response.data.data;
 };

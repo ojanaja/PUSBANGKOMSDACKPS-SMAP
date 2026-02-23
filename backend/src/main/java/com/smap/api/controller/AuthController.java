@@ -56,6 +56,11 @@ public class AuthController {
                                 .nip(dbUser.getNip())
                                 .jabatan(dbUser.getJabatan())
                                 .bidang(dbUser.getBidang())
+                                .permissions(dbUser.getPermissions() != null
+                                                ? dbUser.getPermissions().stream()
+                                                                .map(p -> p.getMenu() + ":" + p.getSubMenu())
+                                                                .collect(java.util.stream.Collectors.toList())
+                                                : java.util.List.of())
                                 .build());
         }
 }

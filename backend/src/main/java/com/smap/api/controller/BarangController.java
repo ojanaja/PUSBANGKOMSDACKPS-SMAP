@@ -20,7 +20,7 @@ public class BarangController {
     private final BarangService barangService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PagedResponse<BarangResponse>>> getAllBarang(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -31,14 +31,14 @@ public class BarangController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<BarangResponse>> getBarangById(@PathVariable Long id) {
         BarangResponse response = barangService.getBarangById(id);
         return ResponseEntity.ok(ApiResponse.success(response, "Berhasil memuat detail barang"));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<BarangResponse>> createBarang(@Valid @RequestBody BarangRequest request) {
         BarangResponse response = barangService.createBarang(request);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -46,7 +46,7 @@ public class BarangController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<BarangResponse>> updateBarang(
             @PathVariable Long id, @Valid @RequestBody BarangRequest request) {
         BarangResponse response = barangService.updateBarang(id, request);
@@ -61,7 +61,7 @@ public class BarangController {
     }
 
     @GetMapping("/{id}/history-peminjaman")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PagedResponse<com.smap.api.domain.dto.PeminjamanResponse>>> getHistoryPeminjaman(
             @PathVariable Long id,
             @RequestParam(defaultValue = "0") int page,
@@ -72,7 +72,7 @@ public class BarangController {
     }
 
     @GetMapping("/{id}/history-perawatan")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS', 'PEMINJAM')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PagedResponse<com.smap.api.domain.dto.PerawatanResponse>>> getHistoryPerawatan(
             @PathVariable Long id,
             @RequestParam(defaultValue = "0") int page,

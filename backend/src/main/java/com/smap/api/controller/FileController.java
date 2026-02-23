@@ -27,7 +27,7 @@ public class FileController {
     private final FileStorageService fileStorageService;
 
     @PostMapping("/upload")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<Map<String, String>>> uploadFile(
             @RequestPart("file") MultipartFile file) {
 

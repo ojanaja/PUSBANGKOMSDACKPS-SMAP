@@ -11,10 +11,11 @@ export interface AuthResponse {
     id: number;
     username: string;
     name: string;
-    role: 'ADMIN' | 'PETUGAS' | 'PEMINJAM' | 'VIEWER';
+    role: 'ADMIN' | 'PEGAWAI';
     nip?: string;
     jabatan?: string;
     bidang?: string;
+    permissions?: string[];
 }
 
 export const login = async (data: LoginRequest): Promise<AuthResponse> => {

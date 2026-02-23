@@ -23,7 +23,7 @@ public class PerawatanController {
     private final PerawatanService perawatanService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PagedResponse<PerawatanResponse>>> getAllPerawatan(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -34,14 +34,14 @@ public class PerawatanController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PerawatanResponse>> getPerawatanById(@PathVariable Long id) {
         PerawatanResponse response = perawatanService.getPerawatanById(id);
         return ResponseEntity.ok(ApiResponse.success(response, "Berhasil memuat detail perawatan"));
     }
 
     @PostMapping("/ajukan")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PerawatanResponse>> ajukanPerawatan(
             @Valid @RequestBody PerawatanRequest request, Authentication authentication) {
 
@@ -53,7 +53,7 @@ public class PerawatanController {
     }
 
     @PostMapping("/{id}/selesai")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PETUGAS')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PEGAWAI')")
     public ResponseEntity<ApiResponse<PerawatanResponse>> selesaiPerawatan(
             @PathVariable Long id,
             @Valid @RequestBody PerawatanSelesaiRequest request,

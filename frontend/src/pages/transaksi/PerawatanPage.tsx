@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Plus, Search, Eye } from "lucide-react";
-import { toast } from "sonner";
 import { getPerawatan } from "@/services/api/perawatanApi";
 import type { Perawatan } from "@/services/api/perawatanApi";
 import { Button } from "@/components/ui/button";
@@ -20,7 +19,6 @@ import { PerawatanForm } from "@/pages/transaksi/PerawatanForm";
 import { PerawatanDetailModal } from "@/pages/transaksi/PerawatanDetailModal";
 
 export default function PerawatanPage() {
-    const queryClient = useQueryClient();
     const [page, setPage] = useState(0);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedPerawatan, setSelectedPerawatan] = useState<Perawatan | null>(null);

@@ -3,6 +3,8 @@ package com.smap.api.domain.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class JwtResponse {
@@ -15,4 +17,5 @@ public class JwtResponse {
     private String nip;
     private String jabatan;
     private String bidang;
+    private List<String> permissions;
 }

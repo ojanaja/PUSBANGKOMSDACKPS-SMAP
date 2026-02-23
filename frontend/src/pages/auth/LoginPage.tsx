@@ -37,7 +37,8 @@ export default function LoginPage() {
                     role: data.role,
                     nip: data.nip,
                     jabatan: data.jabatan,
-                    bidang: data.bidang
+                    bidang: data.bidang,
+                    permissions: data.permissions
                 },
                 data.token
             );
