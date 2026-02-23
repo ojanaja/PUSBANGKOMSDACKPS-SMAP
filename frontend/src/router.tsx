@@ -12,7 +12,9 @@ const PerawatanPage = lazy(() => import('@/pages/transaksi/PerawatanPage'));
 const KembaliServicePage = lazy(() => import('@/pages/transaksi/KembaliServicePage'));
 const LaporanPage = lazy(() => import('@/pages/laporan/LaporanPage'));
 const UserManagementPage = lazy(() => import('@/pages/system/UserManagementPage'));
+const ProfilePage = lazy(() => import('@/pages/system/ProfilePage'));
 const InformasiBarangPage = lazy(() => import('@/pages/informasi/InformasiBarangPage'));
+import UnauthorizedPage from './pages/auth/UnauthorizedPage';
 
 export const router = createBrowserRouter([
     {
@@ -46,7 +48,7 @@ export const router = createBrowserRouter([
             {
                 path: 'master/barang',
                 element: (
-                    <RoleGuard allowedRoles={['ADMIN', 'PETUGAS']}>
+                    <RoleGuard allowedRoles={['ADMIN', 'PEGAWAI']}>
                         <Suspense fallback={<div className="p-8">Loading Barang...</div>}>
                             <BarangPage />
                         </Suspense>
@@ -56,7 +58,7 @@ export const router = createBrowserRouter([
             {
                 path: 'transaksi/peminjaman',
                 element: (
-                    <RoleGuard allowedRoles={['ADMIN', 'PETUGAS', 'PEMINJAM']}>
+                    <RoleGuard allowedRoles={['ADMIN', 'PEGAWAI']}>
                         <Suspense fallback={<div className="p-8">Loading Transaksi...</div>}>
                             <PeminjamanPage />
                         </Suspense>
@@ -66,7 +68,7 @@ export const router = createBrowserRouter([
             {
                 path: 'transaksi/pengembalian-pinjaman',
                 element: (
-                    <RoleGuard allowedRoles={['ADMIN', 'PETUGAS']}>
+                    <RoleGuard allowedRoles={['ADMIN', 'PEGAWAI']}>
                         <Suspense fallback={<div className="p-8">Loading Pengembalian...</div>}>
                             <PengembalianPage />
                         </Suspense>
@@ -76,7 +78,7 @@ export const router = createBrowserRouter([
             {
                 path: 'transaksi/perawatan',
                 element: (
-                    <RoleGuard allowedRoles={['ADMIN', 'PETUGAS']}>
+                    <RoleGuard allowedRoles={['ADMIN', 'PEGAWAI']}>
                         <Suspense fallback={<div className="p-8">Loading Transaksi...</div>}>
                             <PerawatanPage />
                         </Suspense>
@@ -86,7 +88,7 @@ export const router = createBrowserRouter([
             {
                 path: 'transaksi/kembali-service',
                 element: (
-                    <RoleGuard allowedRoles={['ADMIN', 'PETUGAS']}>
+                    <RoleGuard allowedRoles={['ADMIN', 'PEGAWAI']}>
                         <Suspense fallback={<div className="p-8">Loading Kembali Service...</div>}>
                             <KembaliServicePage />
                         </Suspense>
@@ -96,7 +98,7 @@ export const router = createBrowserRouter([
             {
                 path: 'laporan',
                 element: (
-                    <RoleGuard allowedRoles={['ADMIN', 'PETUGAS']}>
+                    <RoleGuard allowedRoles={['ADMIN', 'PEGAWAI']}>
                         <Suspense fallback={<div className="p-8">Loading Laporan...</div>}>
                             <LaporanPage />
                         </Suspense>
@@ -106,7 +108,7 @@ export const router = createBrowserRouter([
             {
                 path: 'informasi/barang',
                 element: (
-                    <RoleGuard allowedRoles={['ADMIN', 'PETUGAS', 'PEMINJAM']}>
+                    <RoleGuard allowedRoles={['ADMIN', 'PEGAWAI']}>
                         <Suspense fallback={<div className="p-8">Loading Informasi...</div>}>
                             <InformasiBarangPage />
                         </Suspense>
@@ -124,8 +126,16 @@ export const router = createBrowserRouter([
                 ),
             },
             {
+                path: 'system/profile',
+                element: (
+                    <Suspense fallback={<div className="p-8">Loading Profile...</div>}>
+                        <ProfilePage />
+                    </Suspense>
+                ),
+            },
+            {
                 path: 'unauthorized',
-                element: <div className="p-8 text-red-500 font-bold">Unauthorized Access</div>,
+                element: <UnauthorizedPage />,
             },
             {
                 path: '*',
